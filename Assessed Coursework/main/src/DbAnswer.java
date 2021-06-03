@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DbAnswer extends DbBasic{
 
@@ -24,13 +26,38 @@ public class DbAnswer extends DbBasic{
     public void go() {
         try {
             DatabaseMetaData metaData = con.getMetaData();
+            OutputStream file = new FileOutputStream("backup.sql");
 
-            OutputStream file = new FileOutputStream("backup.txt");
+            /*
+             Generate the header with signature and date
+             */
+            String header = "" +
+                    "/*\n" +
+                    " Data Transfer\n\n" +
+                    " Author\t\t: Hao Yukun\n" +
+                    " LU ID\t\t: 37532073\n" +
+                    " BJTU ID\t: 18722007\n\n"
+                    ;
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+            header += " Date: " + dateFormat.format(date) + "\n*/\n";
+            file.write(header.getBytes());
 
+            /*
+             Read data from database and generate SQL statements
+             */
             ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
             while (tables.next()) {
-                System.out.println(tables.getString("TABLE_NAME"));
-                file.write(tables.getString("TABLE_NAME").getBytes());
+                String tableName = tables.getString("TABLE_NAME");
+
+                String tableStructure = "\n" +
+                        "-- ----------------------------\n" +
+                        "-- Table structure for " + tableName + "\n" +
+                        "-- ----------------------------\n" +
+                        "DROP TABLE IF EXISTS `" + tableName + "`;\n"
+                        ;
+                System.out.print(tableStructure);
+                file.write(tableStructure.getBytes());
             }
             file.close();
         } catch (SQLException | IOException exception) {
