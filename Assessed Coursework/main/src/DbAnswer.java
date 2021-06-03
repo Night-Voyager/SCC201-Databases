@@ -1,7 +1,8 @@
-import java.sql.Statement;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DbAnswer extends DbBasic{
-    private Statement stmt;
 
     /**
      * Constructor
@@ -17,6 +18,16 @@ public class DbAnswer extends DbBasic{
     }
 
     public void go() {
+        try {
+            DatabaseMetaData metaData = con.getMetaData();
+            ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
 
+            while (tables.next()) {
+                System.out.println(tables.getString("TABLE_NAME"));
+            }
+        } catch (SQLException sqlException) {
+            notify(sqlException.getMessage(), sqlException);
+            close();
+        }
     }
 }
