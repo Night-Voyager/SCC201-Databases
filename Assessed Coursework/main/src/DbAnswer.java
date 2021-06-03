@@ -48,19 +48,43 @@ public class DbAnswer extends DbBasic{
              */
             ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
             while (tables.next()) {
+
+                /*
+                 Get table name and generate comments and statements
+                 */
                 String tableName = tables.getString("TABLE_NAME");
 
                 String tableStructure = "\n" +
                         "-- ----------------------------\n" +
                         "-- Table structure for " + tableName + "\n" +
                         "-- ----------------------------\n" +
-                        "DROP TABLE IF EXISTS `" + tableName + "`;\n"
+                        "DROP TABLE IF EXISTS `" + tableName + "`;\n" +
+                        "CREATE TABLE `" + tableName + "` (\n"
                         ;
+
+                /*
+                 Read columns in each table and generate statements
+                 */
+                ResultSet columns = metaData.getColumns(null, null, tableName, null);
+                while (columns.next()) {
+                    String columnName = columns.getString("COLUMN_NAME");
+                    String dataTypeName = columns.getString("TYPE_NAME");
+                    tableStructure += "  `" + columnName + "` " + dataTypeName + ",\n";
+                }
+                tableStructure += ");\n";
+
+                /*
+                 Print current result on the console and write it in the target file
+                 */
                 System.out.print(tableStructure);
                 file.write(tableStructure.getBytes());
             }
             file.close();
+
         } catch (SQLException | IOException exception) {
+            /*
+             Print message when an exception occurs, and close the connect to the database
+             */
             notify(exception.getMessage(), exception);
             close();
         }
