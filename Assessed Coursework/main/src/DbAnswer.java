@@ -71,7 +71,18 @@ public class DbAnswer extends DbBasic{
                     String dataTypeName = columns.getString("TYPE_NAME");
                     tableStructure += "  `" + columnName + "` " + dataTypeName + ",\n";
                 }
-                tableStructure += ");\n";
+
+                /*
+                 Get primary key for each table and generate statement
+                 */
+                ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tableName);
+                tableStructure += "  PRIMARY KEY (";
+                while (primaryKeys.next()) {
+                    tableStructure += "`" + primaryKeys.getString("COLUMN_NAME") + "`, ";
+                }
+                tableStructure += "\b\b),";
+
+                tableStructure += "\b\n);\n";
 
                 /*
                  Print current result on the console and write it in the target file

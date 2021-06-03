@@ -5,7 +5,7 @@
  LU ID		: 37532073
  BJTU ID	: 18722007
 
- Date: 03/06/2021 11:01:43
+ Date: 04/06/2021 01:28:12
 */
 
 -- ----------------------------
@@ -16,6 +16,7 @@ CREATE TABLE `department` (
   `d_id` VARCHAR(5),
   `d_title` VARCHAR(10),
   `location` VARCHAR(15),
+  PRIMARY KEY (`d_id`, ),
 );
 
 -- ----------------------------
@@ -29,6 +30,7 @@ CREATE TABLE `staff` (
   `pos` VARCHAR(15),
   `qual` VARCHAR(5),
   `d_id` VARCHAR(5),
+  PRIMARY KEY (`s_id`, ),
 );
 
 -- ----------------------------
@@ -41,6 +43,7 @@ CREATE TABLE `courses` (
   `code` VARCHAR(4),
   `year` VARCHAR(4),
   `d_id` VARCHAR(5),
+  PRIMARY KEY (`c_id`, ),
 );
 
 -- ----------------------------
@@ -52,6 +55,7 @@ CREATE TABLE `projects` (
   `p_title` VARCHAR(30),
   `funder` VARCHAR(10),
   `funding` INT,
+  PRIMARY KEY (`p_id`, ),
 );
 
 -- ----------------------------
@@ -61,6 +65,7 @@ DROP TABLE IF EXISTS `give_course`;
 CREATE TABLE `give_course` (
   `s_id` VARCHAR(4),
   `c_id` VARCHAR(3),
+  PRIMARY KEY (`s_id`, `c_id`, ),
 );
 
 -- ----------------------------
@@ -72,4 +77,5 @@ CREATE TABLE `work_on` (
   `p_id` VARCHAR(10),
   `start_date` INT,
   `stop_date` INT,
+  PRIMARY KEY (`s_id`, `p_id`, ),
 );
