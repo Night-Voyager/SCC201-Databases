@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,7 +30,7 @@ public class DbAnswer extends DbBasic{
             /*
              Generate the header with signature and date
              */
-            String header = "" +
+            String header =
                     "/*\n" +
                     " Data Transfer\n\n" +
                     " Author\t\t: Hao Yukun\n" +
@@ -59,7 +58,7 @@ public class DbAnswer extends DbBasic{
                         "-- Table structure for " + tableName + "\n" +
                         "-- ----------------------------\n" +
                         "DROP TABLE IF EXISTS `" + tableName + "`;\n" +
-                        "CREATE TABLE `" + tableName + "` (\n"
+                        "CREATE TABLE `" + tableName + "` ("
                         ;
 
                 /*
@@ -69,18 +68,31 @@ public class DbAnswer extends DbBasic{
                 while (columns.next()) {
                     String columnName = columns.getString("COLUMN_NAME");
                     String dataTypeName = columns.getString("TYPE_NAME");
-                    tableStructure += "  `" + columnName + "` " + dataTypeName + ",\n";
+                    tableStructure += "\n  `" + columnName + "` " + dataTypeName + ",";
                 }
 
                 /*
                  Get primary key for each table and generate statement
                  */
                 ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tableName);
-                tableStructure += "  PRIMARY KEY (";
+                tableStructure += "\n  PRIMARY KEY (";
                 while (primaryKeys.next()) {
                     tableStructure += "`" + primaryKeys.getString("COLUMN_NAME") + "`, ";
                 }
                 tableStructure += "\b\b),";
+
+                /*
+                 Get primary key for each table and generate statement
+                 */
+                ResultSet foreignKeys = metaData.getImportedKeys(null, null, tableName);
+                while (foreignKeys.next()) {
+                    tableStructure +=
+                            "\n  FOREIGN KEY " +
+                                    "(`" + foreignKeys.getString("FKCOLUMN_NAME") + "`) " +
+                                    "REFERENCES `" + foreignKeys.getString("PKTABLE_NAME") + "` " +
+                                    "(`" + foreignKeys.getString("PKCOLUMN_NAME") + "`), "
+                    ;
+                }
 
                 tableStructure += "\b\n);\n";
 
