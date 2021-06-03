@@ -79,7 +79,7 @@ public class DbAnswer extends DbBasic{
                 while (primaryKeys.next()) {
                     tableStructure += "`" + primaryKeys.getString("COLUMN_NAME") + "`, ";
                 }
-                tableStructure += "\b\b),";
+                tableStructure += "\b\b)";
 
                 /*
                  Get primary key for each table and generate statement
@@ -87,14 +87,14 @@ public class DbAnswer extends DbBasic{
                 ResultSet foreignKeys = metaData.getImportedKeys(null, null, tableName);
                 while (foreignKeys.next()) {
                     tableStructure +=
-                            "\n  FOREIGN KEY " +
+                            ",\n  FOREIGN KEY " +
                                     "(`" + foreignKeys.getString("FKCOLUMN_NAME") + "`) " +
                                     "REFERENCES `" + foreignKeys.getString("PKTABLE_NAME") + "` " +
-                                    "(`" + foreignKeys.getString("PKCOLUMN_NAME") + "`), "
+                                    "(`" + foreignKeys.getString("PKCOLUMN_NAME") + "`)"
                     ;
                 }
 
-                tableStructure += "\b\n);\n";
+                tableStructure += "\n);\n";
 
                 /*
                  Print current result on the console and write it in the target file
