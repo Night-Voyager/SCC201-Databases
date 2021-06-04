@@ -5,7 +5,7 @@
  LU ID		: 37532073
  BJTU ID	: 18722007
 
- Date: 04/06/2021 03:33:46
+ Date: 04/06/2021 03:32:46
 */
 
 -- ----------------------------
@@ -16,7 +16,7 @@ CREATE TABLE `department` (
   `d_id` VARCHAR(5),
   `d_title` VARCHAR(10),
   `location` VARCHAR(15),
-  PRIMARY KEY (`d_id`, )
+  PRIMARY KEY (`d_id`)
 );
 
 -- ----------------------------
@@ -36,7 +36,7 @@ CREATE TABLE `staff` (
   `pos` VARCHAR(15),
   `qual` VARCHAR(5),
   `d_id` VARCHAR(5),
-  PRIMARY KEY (`s_id`, ),
+  PRIMARY KEY (`s_id`),
   FOREIGN KEY (`d_id`) REFERENCES `department` (`d_id`)
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE `courses` (
   `code` VARCHAR(4),
   `year` VARCHAR(4),
   `d_id` VARCHAR(5),
-  PRIMARY KEY (`c_id`, ),
+  PRIMARY KEY (`c_id`),
   FOREIGN KEY (`d_id`) REFERENCES `department` (`d_id`)
 );
 
@@ -81,7 +81,7 @@ CREATE TABLE `projects` (
   `p_title` VARCHAR(30),
   `funder` VARCHAR(10),
   `funding` INT,
-  PRIMARY KEY (`p_id`, )
+  PRIMARY KEY (`p_id`)
 );
 
 -- ----------------------------
@@ -100,7 +100,7 @@ DROP TABLE IF EXISTS `give_course`;
 CREATE TABLE `give_course` (
   `s_id` VARCHAR(4),
   `c_id` VARCHAR(3),
-  PRIMARY KEY (`s_id`, `c_id`, ),
+  PRIMARY KEY (`s_id`, `c_id`),
   FOREIGN KEY (`c_id`) REFERENCES `courses` (`c_id`),
   FOREIGN KEY (`s_id`) REFERENCES `staff` (`s_id`)
 );
@@ -124,7 +124,7 @@ CREATE TABLE `work_on` (
   `p_id` VARCHAR(10),
   `start_date` INT,
   `stop_date` INT,
-  PRIMARY KEY (`s_id`, `p_id`, ),
+  PRIMARY KEY (`s_id`, `p_id`),
   FOREIGN KEY (`p_id`) REFERENCES `projects` (`p_id`),
   FOREIGN KEY (`s_id`) REFERENCES `staff` (`s_id`)
 );

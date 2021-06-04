@@ -32,17 +32,17 @@ public class DbAnswer extends DbBasic{
             /*
              Generate the header with signature and date
              */
-            String header =
+            StringBuffer header = new StringBuffer(
                     "/*\n" +
                     " Data Transfer\n\n" +
                     " Author\t\t: Hao Yukun\n" +
                     " LU ID\t\t: 37532073\n" +
                     " BJTU ID\t: 18722007\n\n"
-                    ;
+            );
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
-            header += " Date: " + dateFormat.format(date) + "\n*/\n";
-            file.write(header.getBytes());
+            header.append(" Date: ").append(dateFormat.format(date)).append("\n*/\n");
+            file.write(header.toString().getBytes());
 
             /*
              Read data from database and generate SQL statements
@@ -55,13 +55,14 @@ public class DbAnswer extends DbBasic{
                  */
                 String tableName = tables.getString("TABLE_NAME");
 
-                String tableStructure = "\n" +
+                StringBuffer tableStructure = new StringBuffer(
+                        "\n" +
                         "-- ----------------------------\n" +
                         "-- Table structure for " + tableName + "\n" +
                         "-- ----------------------------\n" +
                         "DROP TABLE IF EXISTS `" + tableName + "`;\n" +
                         "CREATE TABLE `" + tableName + "` ("
-                        ;
+                );
 
                 /*
                  Read columns in each table and generate statements
@@ -77,39 +78,39 @@ public class DbAnswer extends DbBasic{
                     String dataTypeName = columns.getString("TYPE_NAME");
                     dataTypeNameArrayList.add(dataTypeName);
 
-                    tableStructure += "\n  `" + columnName + "` " + dataTypeName + ",";
+                    tableStructure.append("\n  `").append(columnName).append("` ").append(dataTypeName).append(",");
                 }
 
                 /*
                  Get primary key for each table and generate statement
                  */
                 ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tableName);
-                tableStructure += "\n  PRIMARY KEY (";
+                tableStructure.append("\n  PRIMARY KEY (");
                 while (primaryKeys.next()) {
-                    tableStructure += "`" + primaryKeys.getString("COLUMN_NAME") + "`, ";
+                    tableStructure.append("`").append(primaryKeys.getString("COLUMN_NAME")).append("`, ");
                 }
-                tableStructure += "\b\b)";
+                tableStructure.delete(tableStructure.length()-2, tableStructure.length()).append(")");
 
                 /*
                  Get primary key for each table and generate statement
                  */
                 ResultSet foreignKeys = metaData.getImportedKeys(null, null, tableName);
                 while (foreignKeys.next()) {
-                    tableStructure +=
-                            ",\n  FOREIGN KEY " +
-                                    "(`" + foreignKeys.getString("FKCOLUMN_NAME") + "`) " +
-                                    "REFERENCES `" + foreignKeys.getString("PKTABLE_NAME") + "` " +
-                                    "(`" + foreignKeys.getString("PKCOLUMN_NAME") + "`)"
+                    tableStructure
+                            .append(",\n  FOREIGN KEY ")
+                            .append("(`").append(foreignKeys.getString("FKCOLUMN_NAME")).append("`) ")
+                            .append("REFERENCES `").append(foreignKeys.getString("PKTABLE_NAME")).append("` ")
+                            .append("(`").append(foreignKeys.getString("PKCOLUMN_NAME")).append("`)")
                     ;
                 }
 
-                tableStructure += "\n);\n";
+                tableStructure.append("\n);\n");
 
                 /*
                  Print current result on the console and write it in the target file
                  */
                 System.out.print(tableStructure);
-                file.write(tableStructure.getBytes());
+                file.write(tableStructure.toString().getBytes());
 
                 /*
                  Read records and generate statements
