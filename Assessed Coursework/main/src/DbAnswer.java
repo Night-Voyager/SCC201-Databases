@@ -4,7 +4,9 @@ import java.io.OutputStream;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class DbAnswer extends DbBasic{
@@ -65,9 +67,16 @@ public class DbAnswer extends DbBasic{
                  Read columns in each table and generate statements
                  */
                 ResultSet columns = metaData.getColumns(null, null, tableName, null);
+                ArrayList<String> columnNameArrayList = new ArrayList<>();
+                ArrayList<String> dataTypeNameArrayList = new ArrayList<>();
+
                 while (columns.next()) {
                     String columnName = columns.getString("COLUMN_NAME");
+                    columnNameArrayList.add(columnName);
+
                     String dataTypeName = columns.getString("TYPE_NAME");
+                    dataTypeNameArrayList.add(dataTypeName);
+
                     tableStructure += "\n  `" + columnName + "` " + dataTypeName + ",";
                 }
 
@@ -101,12 +110,45 @@ public class DbAnswer extends DbBasic{
                  */
                 System.out.print(tableStructure);
                 file.write(tableStructure.getBytes());
+
+                /*
+                 Read records and generate statements
+                 */
+                String records = "\n" +
+                        "-- ----------------------------\n" +
+                        "-- Records of " + tableName + "\n" +
+                        "-- ----------------------------\n";
+
+                Statement stmt = con.createStatement();
+                ResultSet values = stmt.executeQuery("SELECT * FROM " + tableName);
+                while (values.next()) {
+                    records += "INSERT INTO `" + tableName + "` VALUES (";
+
+                    for (int i = 0; i < columnNameArrayList.size(); i++) {
+                        String value = values.getString(columnNameArrayList.get(i));
+                        if (dataTypeNameArrayList.get(i).startsWith("INT")) {
+                            records += value;
+                        }
+                        else {
+                            records += "`" + value + "`";
+                        }
+                        records += ", ";
+                    }
+
+                    records += "\b\b);\n";
+                }
+
+                /*
+                 Print generated statements of the records on the console and write them in the target file
+                 */
+                System.out.print(records);
+                file.write(records.getBytes());
             }
             file.close();
 
         } catch (SQLException | IOException exception) {
             /*
-             Print message when an exception occurs, and close the connect to the database
+             Print message when an exception occurs, and close the connection to the database
              */
             notify(exception.getMessage(), exception);
             close();
