@@ -120,7 +120,7 @@ public class DbAnswer extends DbBasic{
                         "-- ----------------------------\n";
 
                 Statement stmt = con.createStatement();
-                ResultSet values = stmt.executeQuery("SELECT * FROM " + tableName);
+                ResultSet values = stmt.executeQuery("SELECT * FROM `" + tableName + "`");
                 while (values.next()) {
                     records += "INSERT INTO `" + tableName + "` VALUES (";
 
