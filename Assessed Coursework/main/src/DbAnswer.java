@@ -115,35 +115,37 @@ public class DbAnswer extends DbBasic{
                 /*
                  Read records and generate statements
                  */
-                String records = "\n" +
+                StringBuffer records = new StringBuffer(
+                        "\n" +
                         "-- ----------------------------\n" +
                         "-- Records of " + tableName + "\n" +
-                        "-- ----------------------------\n";
+                        "-- ----------------------------\n"
+                );
 
                 Statement stmt = con.createStatement();
                 ResultSet values = stmt.executeQuery("SELECT * FROM `" + tableName + "`");
                 while (values.next()) {
-                    records += "INSERT INTO `" + tableName + "` VALUES (";
+                    records.append("INSERT INTO `").append(tableName).append("` VALUES (");
 
                     for (int i = 0; i < columnNameArrayList.size(); i++) {
                         String value = values.getString(columnNameArrayList.get(i));
                         if (dataTypeNameArrayList.get(i).startsWith("INT")) {
-                            records += value;
+                            records.append(value);
                         }
                         else {
-                            records += "`" + value + "`";
+                            records.append("`").append(value).append("`");
                         }
-                        records += ", ";
+                        records.append(", ");
                     }
 
-                    records += "\b\b);\n";
+                    records.delete(records.length()-2, records.length()).append(");\n");
                 }
 
                 /*
                  Print generated statements of the records on the console and write them in the target file
                  */
                 System.out.print(records);
-                file.write(records.getBytes());
+                file.write(records.toString().getBytes());
             }
             file.close();
 
