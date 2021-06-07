@@ -5,8 +5,10 @@
  LU ID		: 37532073
  BJTU ID	: 18722007
 
- Date: 04/06/2021 04:38:37
+ Date: 07/06/2021 07:44:07
 */
+
+PRAGMA foreign_keys = false;
 
 -- ----------------------------
 -- Table structure for department
@@ -138,3 +140,5 @@ INSERT INTO `work_on` VALUES (`ND`, `GUIDE`, 1997, 1999);
 INSERT INTO `work_on` VALUES (`JF`, `GUIDE`, 1998, 1999);
 INSERT INTO `work_on` VALUES (`GSB`, `MCSCW`, 1990, 1994);
 INSERT INTO `work_on` VALUES (`BB`, `AN`, 1985, 1989);
+
+PRAGMA foreign_keys = true;

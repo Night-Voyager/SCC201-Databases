@@ -45,6 +45,13 @@ public class DbAnswer extends DbBasic{
             file.write(header.toString().getBytes());
 
             /*
+             Remove foreign key constraints
+             */
+            StringBuffer foreignKeyConstraints = new StringBuffer("\nPRAGMA foreign_keys = false;\n");
+            System.out.print(foreignKeyConstraints);
+            file.write(foreignKeyConstraints.toString().getBytes());
+
+            /*
              Read data from database and generate SQL statements
              */
             ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
@@ -147,6 +154,14 @@ public class DbAnswer extends DbBasic{
                 System.out.print(records);
                 file.write(records.toString().getBytes());
             }
+
+            /*
+             Recover foreign key constraints
+             */
+            foreignKeyConstraints = new StringBuffer("\nPRAGMA foreign_keys = true;\n");
+            System.out.print(foreignKeyConstraints);
+            file.write(foreignKeyConstraints.toString().getBytes());
+
             file.close();
 
         } catch (SQLException | IOException exception) {
