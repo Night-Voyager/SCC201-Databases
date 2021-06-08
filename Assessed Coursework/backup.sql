@@ -6,7 +6,7 @@
  BJTU ID	: 18722007
 
  Source File: LSH.db
- Date: 08/06/2021 09:39:01
+ Date: 08/06/2021 11:28:07
 */
 
 PRAGMA foreign_keys = false;
@@ -32,24 +32,24 @@ INSERT INTO "planets" VALUES (4, 'Braal', 8);
 INSERT INTO "planets" VALUES (5, 'Cargg', 20);
 INSERT INTO "planets" VALUES (6, 'Colu', 30);
 INSERT INTO "planets" VALUES (7, 'Daxam', 30);
-INSERT INTO "planets" VALUES (8, 'Dryad', \N);
+INSERT INTO "planets" VALUES (8, 'Dryad', '\N');
 INSERT INTO "planets" VALUES (9, 'Durla', 10);
-INSERT INTO "planets" VALUES (10, 'Earth', \N);
-INSERT INTO "planets" VALUES (11, 'Hyrakius', \N);
+INSERT INTO "planets" VALUES (10, 'Earth', '\N');
+INSERT INTO "planets" VALUES (11, 'Hyrakius', '\N');
 INSERT INTO "planets" VALUES (12, 'Imsk', 27);
 INSERT INTO "planets" VALUES (13, 'Krypton', 0);
 INSERT INTO "planets" VALUES (14, 'Naltor', 27);
 INSERT INTO "planets" VALUES (15, 'Orando', 8);
-INSERT INTO "planets" VALUES (16, 'Phlon', \N);
+INSERT INTO "planets" VALUES (16, 'Phlon', '\N');
 INSERT INTO "planets" VALUES (17, 'Rimbor', 30);
 INSERT INTO "planets" VALUES (18, 'Starhaven', 27);
 INSERT INTO "planets" VALUES (19, 'Talok VIII', 27);
-INSERT INTO "planets" VALUES (20, 'Teall', \N);
+INSERT INTO "planets" VALUES (20, 'Teall', '\N');
 INSERT INTO "planets" VALUES (21, 'Tharr', 27);
-INSERT INTO "planets" VALUES (22, 'Titan', \N);
+INSERT INTO "planets" VALUES (22, 'Titan', '\N');
 INSERT INTO "planets" VALUES (23, 'Trom', 27);
 INSERT INTO "planets" VALUES (24, 'Winath', 8);
-INSERT INTO "planets" VALUES (25, 'Xanthu', \N);
+INSERT INTO "planets" VALUES (25, 'Xanthu', '\N');
 INSERT INTO "planets" VALUES (26, 'Zoon', 34);
 
 -- ----------------------------

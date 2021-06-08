@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class DbAnswer extends DbBasic{
 
@@ -137,8 +138,14 @@ public class DbAnswer extends DbBasic{
 
                     for (int i = 0; i < columnNameArrayList.size(); i++) {
                         String value = values.getString(columnNameArrayList.get(i));
+
                         if (dataTypeNameArrayList.get(i).startsWith("INT")) {
-                            records.append(value);
+                            Pattern pattern = Pattern.compile("(\\-|\\+)?\\d+(\\.\\d+)?");
+
+                            if (pattern.matcher(value).matches())
+                                records.append(value);
+                            else
+                                records.append("'").append(value).append("'");
                         }
                         else {
                             records.append("'").append(value.replaceAll("'", "''")).append("'");
