@@ -141,7 +141,7 @@ public class DbAnswer extends DbBasic{
                             records.append(value);
                         }
                         else {
-                            records.append("'").append(value).append("'");
+                            records.append("'").append(value.replaceAll("'", "''")).append("'");
                         }
                         records.append(", ");
                     }
