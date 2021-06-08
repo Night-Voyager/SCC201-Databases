@@ -37,7 +37,8 @@ public class DbAnswer extends DbBasic{
                     " Data Transfer\n\n" +
                     " Author\t\t: Hao Yukun\n" +
                     " LU ID\t\t: 37532073\n" +
-                    " BJTU ID\t: 18722007\n\n"
+                    " BJTU ID\t: 18722007\n\n" +
+                    " Source File: " + dbName + "\n"
             );
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
