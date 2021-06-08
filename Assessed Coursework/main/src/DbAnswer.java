@@ -68,8 +68,8 @@ public class DbAnswer extends DbBasic{
                         "-- ----------------------------\n" +
                         "-- Table structure for " + tableName + "\n" +
                         "-- ----------------------------\n" +
-                        "DROP TABLE IF EXISTS `" + tableName + "`;\n" +
-                        "CREATE TABLE `" + tableName + "` ("
+                        "DROP TABLE IF EXISTS \"" + tableName + "\";\n" +
+                        "CREATE TABLE \"" + tableName + "\" ("
                 );
 
                 /*
@@ -86,7 +86,7 @@ public class DbAnswer extends DbBasic{
                     String dataTypeName = columns.getString("TYPE_NAME");
                     dataTypeNameArrayList.add(dataTypeName);
 
-                    tableStructure.append("\n  `").append(columnName).append("` ").append(dataTypeName).append(",");
+                    tableStructure.append("\n  \"").append(columnName).append("\" ").append(dataTypeName).append(",");
                 }
 
                 /*
@@ -95,7 +95,7 @@ public class DbAnswer extends DbBasic{
                 ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tableName);
                 tableStructure.append("\n  PRIMARY KEY (");
                 while (primaryKeys.next()) {
-                    tableStructure.append("`").append(primaryKeys.getString("COLUMN_NAME")).append("`, ");
+                    tableStructure.append("\"").append(primaryKeys.getString("COLUMN_NAME")).append("\", ");
                 }
                 tableStructure.delete(tableStructure.length()-2, tableStructure.length()).append(")");
 
@@ -106,9 +106,9 @@ public class DbAnswer extends DbBasic{
                 while (foreignKeys.next()) {
                     tableStructure
                             .append(",\n  FOREIGN KEY ")
-                            .append("(`").append(foreignKeys.getString("FKCOLUMN_NAME")).append("`) ")
-                            .append("REFERENCES `").append(foreignKeys.getString("PKTABLE_NAME")).append("` ")
-                            .append("(`").append(foreignKeys.getString("PKCOLUMN_NAME")).append("`)")
+                            .append("(\"").append(foreignKeys.getString("FKCOLUMN_NAME")).append("\") ")
+                            .append("REFERENCES \"").append(foreignKeys.getString("PKTABLE_NAME")).append("\" ")
+                            .append("(\"").append(foreignKeys.getString("PKCOLUMN_NAME")).append("\")")
                     ;
                 }
 
@@ -133,7 +133,7 @@ public class DbAnswer extends DbBasic{
                 Statement stmt = con.createStatement();
                 ResultSet values = stmt.executeQuery("SELECT * FROM `" + tableName + "`");
                 while (values.next()) {
-                    records.append("INSERT INTO `").append(tableName).append("` VALUES (");
+                    records.append("INSERT INTO \"").append(tableName).append("\" VALUES (");
 
                     for (int i = 0; i < columnNameArrayList.size(); i++) {
                         String value = values.getString(columnNameArrayList.get(i));
@@ -141,7 +141,7 @@ public class DbAnswer extends DbBasic{
                             records.append(value);
                         }
                         else {
-                            records.append("`").append(value).append("`");
+                            records.append("'").append(value).append("'");
                         }
                         records.append(", ");
                     }
