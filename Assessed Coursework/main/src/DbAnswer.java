@@ -28,7 +28,12 @@ public class DbAnswer extends DbBasic{
     public void go() {
         try {
             DatabaseMetaData metaData = con.getMetaData();
-            OutputStream file = new FileOutputStream("backup.sql");
+
+            /*
+             Generate the target file for backup
+             */
+            String databaseName = dbName.substring(0, dbName.lastIndexOf('.'));
+            OutputStream file = new FileOutputStream(databaseName + "_backup.sql");
 
             /*
              Generate the header with signature and date
