@@ -4,14 +4,14 @@ import java.sql.Statement;
 
 public class DbTest extends DbBasic{
     public DbTest() {
-        super("LSH.db");
+        super("Northwind.db");
 
         try {
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM planets;");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Customers;");
 
             while (rs.next()) {
-                System.out.println(rs.getInt("popvalue"));
+                System.out.println(rs.getString("Region"));
             }
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();

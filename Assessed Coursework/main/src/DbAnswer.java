@@ -144,6 +144,12 @@ public class DbAnswer extends DbBasic{
                     for (int i = 0; i < columnNameArrayList.size(); i++) {
                         String value = values.getString(columnNameArrayList.get(i));
 
+                        // handle null values
+                        if (value == null) {
+                            records.append("null").append(", ");
+                            continue;
+                        }
+
                         if (dataTypeNameArrayList.get(i).startsWith("INT")) {
                             Pattern pattern = Pattern.compile("(\\-|\\+)?\\d+(\\.\\d+)?");
 
