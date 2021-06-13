@@ -98,15 +98,15 @@ public class DbAnswer extends DbBasic{
                 /*
                  Get primary key for each table and generate statement
                  */
-                ResultSet primaryKeys = metaData.getPrimaryKeys(null, null, tableName);
+                ResultSet primaryKey = metaData.getPrimaryKeys(null, null, tableName);
                 tableStructure.append("\n  PRIMARY KEY (");
-                while (primaryKeys.next()) {
-                    tableStructure.append("\"").append(primaryKeys.getString("COLUMN_NAME")).append("\", ");
+                while (primaryKey.next()) {
+                    tableStructure.append("\"").append(primaryKey.getString("COLUMN_NAME")).append("\", ");
                 }
                 tableStructure.delete(tableStructure.length()-2, tableStructure.length()).append(")");
 
                 /*
-                 Get primary key for each table and generate statement
+                 Get foreign keys for each table and generate statement
                  */
                 ResultSet foreignKeys = metaData.getImportedKeys(null, null, tableName);
                 while (foreignKeys.next()) {
