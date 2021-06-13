@@ -11,16 +11,16 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public class DbAnswer extends DbBasic{
+    /*
+     A list of numerical types
 
-    /**
-     * Constructor
-     * <p>
-     * Records a copy of the database name and
-     * opens the database for use
-     *
-     * @param _dbName String holding the name of the database,
-     *                for example, C:/directory/subdir/mydb.db
+     **NOTICE**: it has been tested that the type codes in java.sql.Types is not the same as the codes returned by
+                 DatabaseMetaData.getColumns(null, null, tableName, null).getInt("DATA_TYPE");
+
+     It is unnecessary to get all numerical types involved, String.contains() can help to do the match.
      */
+    String [] numericalTypes = {"INT", "FLOAT", "REAL", "DOUBLE", "NUMERIC", "DECIMAL"};
+
     public DbAnswer(String _dbName) {
         super(_dbName);
     }
@@ -150,7 +150,7 @@ public class DbAnswer extends DbBasic{
                             continue;
                         }
 
-                        if (dataTypeNameArrayList.get(i).startsWith("INT")) {
+                        if (isTypeContained(numericalTypes, dataTypeNameArrayList.get(i))) {
                             Pattern pattern = Pattern.compile("(\\-|\\+)?\\d+(\\.\\d+)?");
 
                             if (pattern.matcher(value).matches())
@@ -190,5 +190,12 @@ public class DbAnswer extends DbBasic{
             notify(exception.getMessage(), exception);
             close();
         }
+    }
+
+    private boolean isTypeContained(String [] typeList, String type) {
+        for (String type_in_list : typeList) {
+            if (type.contains(type_in_list)) return true;
+        }
+        return false;
     }
 }
