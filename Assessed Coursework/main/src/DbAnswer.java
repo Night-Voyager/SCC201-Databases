@@ -143,6 +143,27 @@ public class DbAnswer extends DbBasic{
 
                     for (int i = 0; i < columnNameArrayList.size(); i++) {
 
+                        String value = values.getString(columnNameArrayList.get(i));
+
+                        // handle null values
+                        if (value == null) {
+                            records.append("NULL").append(", ");
+                            continue;
+                        }
+
+                        // handle values of numerical type
+                        if (isTypeContained(numericalTypes, dataTypeNameArrayList.get(i))) {
+                            Pattern pattern = Pattern.compile("(\\-|\\+)?\\d+(\\.\\d+)?");
+
+                            if (pattern.matcher(value).matches())
+                                records.append(value);
+                            else
+                                records.append("'").append(value).append("'"); // handle non-numerical values in numerical type fields
+
+                            records.append(", ");
+                            continue;
+                        }
+
                         // handle values of BLOB type
                         //
                         // The getBlob() method is not implemented by the given SQLite JDBC driver,
@@ -169,28 +190,8 @@ public class DbAnswer extends DbBasic{
                             continue;
                         }
 
-                        String value = values.getString(columnNameArrayList.get(i));
-
-                        // handle null values
-                        if (value == null) {
-                            records.append("null").append(", ");
-                            continue;
-                        }
-
-                        // handle values of numerical type
-                        if (isTypeContained(numericalTypes, dataTypeNameArrayList.get(i))) {
-                            Pattern pattern = Pattern.compile("(\\-|\\+)?\\d+(\\.\\d+)?");
-
-                            if (pattern.matcher(value).matches())
-                                records.append(value);
-                            else
-                                records.append("'").append(value).append("'"); // handle non-numerical values in numerical type fields
-                        }
                         // handle the remaining values as strings
-                        else {
-                            records.append("'").append(value.replaceAll("'", "''")).append("'");
-                        }
-                        records.append(", ");
+                        records.append("'").append(value.replaceAll("'", "''")).append("', ");
                     }
 
                     records.delete(records.length()-2, records.length()).append(");\n");
