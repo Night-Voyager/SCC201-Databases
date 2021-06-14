@@ -142,6 +142,33 @@ public class DbAnswer extends DbBasic{
                     records.append("INSERT INTO \"").append(tableName).append("\" VALUES (");
 
                     for (int i = 0; i < columnNameArrayList.size(); i++) {
+
+                        // handle values of BLOB type
+                        //
+                        // The getBlob() method is not implemented by the given SQLite JDBC driver,
+                        // hence blob is handled as bytes here.
+                        if (dataTypeNameArrayList.get(i).contains("BLOB")) {
+
+                            // read data from database as a byte array
+                            byte [] byteValue = values.getBytes(columnNameArrayList.get(i));
+
+                            StringBuffer hexValue = new StringBuffer();
+                            String temp;
+
+                            // transform the byte array into a string of hexadecimal digits
+                            // reference: https://www.cnblogs.com/dbutil/p/9441111.html
+                            for (byte b : byteValue) {
+                                temp = Integer.toHexString(b & 0xFF);
+                                hexValue.append( (temp.length() == 1)? "0" + temp : temp); // Each byte is represented by two bits.
+                                                                                           // If the number of bits is not enough,
+                                                                                           // then fill the higher bit with "0".
+                            }
+
+                            // add the data in the type of the string of hexadecimal digits into the string for output
+                            records.append("'").append(hexValue).append("'").append(", ");
+                            continue;
+                        }
+
                         String value = values.getString(columnNameArrayList.get(i));
 
                         // handle null values
