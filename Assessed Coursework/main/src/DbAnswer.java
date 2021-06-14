@@ -177,14 +177,16 @@ public class DbAnswer extends DbBasic{
                             continue;
                         }
 
+                        // handle values of numerical type
                         if (isTypeContained(numericalTypes, dataTypeNameArrayList.get(i))) {
                             Pattern pattern = Pattern.compile("(\\-|\\+)?\\d+(\\.\\d+)?");
 
                             if (pattern.matcher(value).matches())
                                 records.append(value);
                             else
-                                records.append("'").append(value).append("'");
+                                records.append("'").append(value).append("'"); // handle non-numerical values in numerical type fields
                         }
+                        // handle the remaining values as strings
                         else {
                             records.append("'").append(value.replaceAll("'", "''")).append("'");
                         }
