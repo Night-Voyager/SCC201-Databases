@@ -164,11 +164,11 @@ public class DbAnswer extends DbBasic{
                             continue;
                         }
 
-                        // handle values of BLOB type
+                        // handle values of BLOB or TEXT type
                         //
                         // The getBlob() method is not implemented by the given SQLite JDBC driver,
                         // hence blob is handled as bytes here.
-                        if (dataTypeNameArrayList.get(i).contains("BLOB")) {
+                        if (dataTypeNameArrayList.get(i).contains("BLOB") || dataTypeNameArrayList.get(i).contains("TEXT")) {
 
                             // read data from database as a byte array
                             byte [] byteValue = values.getBytes(columnNameArrayList.get(i));
