@@ -2,6 +2,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class DbBasic {
 	/**
@@ -45,7 +46,7 @@ public class DbBasic {
 	 * @param message	informational String to display
 	 * @param e		the Exception
 	 */
-	public void notify( String message, Exception e ) {
+	public static void notify( String message, Exception e ) {
 		System.out.println( message + " : " + e );
 		e.printStackTrace ( );
 		System.exit( 0 );
@@ -93,7 +94,16 @@ public class DbBasic {
 				 "SQLite database file ["
 				+ dbName
 				+ "] does not exist");
-			System.exit( 0 );
+
+			System.out.println(
+					"Create SQLite database file ["
+					+ dbName
+					+ "]? (y/n)"
+			);
+
+			String in = new Scanner(System.in).next();
+			if (in.equalsIgnoreCase("y")) getConnection();
+			else System.exit( 0 );
 		}
 
 		try {

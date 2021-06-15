@@ -1,16 +1,20 @@
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class DbAnswer extends DbBasic{
+public class DbAnswer{
+    String dbName;
+
+    DbBasic sourceDb;
+    Connection sourceDbCon;
+    DbBasic targetDb;
+    Connection targetDbCon;
+
     /*
      A list of numerical types
 
@@ -21,19 +25,26 @@ public class DbAnswer extends DbBasic{
      */
     String [] numericalTypes = {"INT", "FLOAT", "REAL", "DOUBLE", "NUMERIC", "DECIMAL"};
 
-    public DbAnswer(String _dbName) {
-        super(_dbName);
+    public DbAnswer(String dbName) {
+        this.dbName = dbName;
+
+        /*
+         Initialize database connections
+         */
+        sourceDb = new DbBasic(dbName + ".db");
+        sourceDbCon = sourceDb.con;
+        targetDb = new DbBasic(dbName + "_backup.db");
+        targetDbCon = targetDb.con;
     }
 
     public void go() {
         try {
-            DatabaseMetaData metaData = con.getMetaData();
+            DatabaseMetaData metaData = sourceDbCon.getMetaData();
 
             /*
              Generate the target file for backup
              */
-            String databaseName = dbName.substring(0, dbName.lastIndexOf('.'));
-            OutputStream file = new FileOutputStream(databaseName + "_backup.sql");
+            OutputStream file = new FileOutputStream(dbName + "_backup.sql");
 
             /*
              Generate the header with signature and date
@@ -44,7 +55,7 @@ public class DbAnswer extends DbBasic{
                     " Author\t\t: Hao Yukun\n" +
                     " LU ID\t\t: 37532073\n" +
                     " BJTU ID\t: 18722007\n\n" +
-                    " Source File: " + dbName + "\n"
+                    " Source File: " + dbName + ".db\n"
             );
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
@@ -57,6 +68,7 @@ public class DbAnswer extends DbBasic{
             StringBuffer foreignKeyConstraints = new StringBuffer("\nPRAGMA foreign_keys = false;\n");
             System.out.print(foreignKeyConstraints);
             file.write(foreignKeyConstraints.toString().getBytes());
+            targetDbCon.createStatement().executeUpdate(foreignKeyConstraints.toString());
 
             /*
              Read data from database and generate SQL statements
@@ -121,10 +133,11 @@ public class DbAnswer extends DbBasic{
                 tableStructure.append("\n);\n");
 
                 /*
-                 Print current result on the console and write it in the target file
+                 Print current result on the console, write it in the backup file, and execute the statements
                  */
                 System.out.print(tableStructure);
                 file.write(tableStructure.toString().getBytes());
+                targetDbCon.createStatement().executeUpdate(tableStructure.toString());
 
                 /*
                  Read records and generate statements
@@ -136,7 +149,7 @@ public class DbAnswer extends DbBasic{
                         "-- ----------------------------\n"
                 );
 
-                Statement stmt = con.createStatement();
+                Statement stmt = sourceDbCon.createStatement();
                 ResultSet values = stmt.executeQuery("SELECT * FROM `" + tableName + "`");
                 while (values.next()) {
                     records.append("INSERT INTO \"").append(tableName).append("\" VALUES (");
@@ -198,10 +211,11 @@ public class DbAnswer extends DbBasic{
                 }
 
                 /*
-                 Print generated statements of the records on the console and write them in the target file
+                 Print generated statements of the records on the console, write them in the backup file, and execute them
                  */
                 System.out.print(records);
                 file.write(records.toString().getBytes());
+                targetDbCon.createStatement().executeUpdate(records.toString());
             }
 
             /*
@@ -210,15 +224,22 @@ public class DbAnswer extends DbBasic{
             foreignKeyConstraints = new StringBuffer("\nPRAGMA foreign_keys = true;\n");
             System.out.print(foreignKeyConstraints);
             file.write(foreignKeyConstraints.toString().getBytes());
+            targetDbCon.createStatement().executeUpdate(foreignKeyConstraints.toString());
 
+            /*
+             Close the output stream of the backup file and the connection to the databases before exiting the program
+             */
             file.close();
+            sourceDb.close();
+            targetDb.close();
 
         } catch (SQLException | IOException exception) {
             /*
              Print message when an exception occurs, and close the connection to the database
              */
-            notify(exception.getMessage(), exception);
-            close();
+            DbBasic.notify(exception.getMessage(), exception);
+            sourceDb.close();
+            targetDb.close();
         }
     }
 
