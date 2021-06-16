@@ -6,7 +6,7 @@
  BJTU ID	: 18722007
 
  Source File: test1.db
- Date: 11/06/2021 02:15:33
+ Date: 16/06/2021 11:15:39
 */
 
 PRAGMA foreign_keys = false;
@@ -25,14 +25,14 @@ CREATE TABLE "Course" (
 -- ----------------------------
 -- Records of Course
 -- ----------------------------
-INSERT INTO "Course" VALUES (1, 'math', 2);
-INSERT INTO "Course" VALUES (2, 'science', 1);
-INSERT INTO "Course" VALUES (3, 'physic', 5);
-INSERT INTO "Course" VALUES (4, 'english', 3);
-INSERT INTO "Course" VALUES (5, 'alysice', 4);
-INSERT INTO "Course" VALUES (6, 'math', 1);
-INSERT INTO "Course" VALUES (7, 'network', 3);
-INSERT INTO "Course" VALUES (8, 'computer', 4);
+INSERT INTO "Course" VALUES (1, '6d617468', 2);
+INSERT INTO "Course" VALUES (2, '736369656e6365', 1);
+INSERT INTO "Course" VALUES (3, '706879736963', 5);
+INSERT INTO "Course" VALUES (4, '656e676c697368', 3);
+INSERT INTO "Course" VALUES (5, '616c7973696365', 4);
+INSERT INTO "Course" VALUES (6, '6d617468', 1);
+INSERT INTO "Course" VALUES (7, '6e6574776f726b', 3);
+INSERT INTO "Course" VALUES (8, '636f6d7075746572', 4);
 
 -- ----------------------------
 -- Table structure for Student
@@ -47,15 +47,15 @@ CREATE TABLE "Student" (
 -- ----------------------------
 -- Records of Student
 -- ----------------------------
-INSERT INTO "Student" VALUES (1, 'q');
-INSERT INTO "Student" VALUES (2, 'a');
-INSERT INTO "Student" VALUES (3, 'w');
-INSERT INTO "Student" VALUES (4, 'z');
-INSERT INTO "Student" VALUES (5, 'e');
-INSERT INTO "Student" VALUES (6, 'd');
-INSERT INTO "Student" VALUES (7, 'r');
-INSERT INTO "Student" VALUES (8, 'c');
-INSERT INTO "Student" VALUES (9, 's');
+INSERT INTO "Student" VALUES (1, '71');
+INSERT INTO "Student" VALUES (2, '61');
+INSERT INTO "Student" VALUES (3, '77');
+INSERT INTO "Student" VALUES (4, '7a');
+INSERT INTO "Student" VALUES (5, '65');
+INSERT INTO "Student" VALUES (6, '64');
+INSERT INTO "Student" VALUES (7, '72');
+INSERT INTO "Student" VALUES (8, '63');
+INSERT INTO "Student" VALUES (9, '73');
 
 -- ----------------------------
 -- Table structure for Teacher
@@ -70,11 +70,11 @@ CREATE TABLE "Teacher" (
 -- ----------------------------
 -- Records of Teacher
 -- ----------------------------
-INSERT INTO "Teacher" VALUES (1, 'aa');
-INSERT INTO "Teacher" VALUES (2, 'bb');
-INSERT INTO "Teacher" VALUES (3, 'cc');
-INSERT INTO "Teacher" VALUES (4, 'dd');
-INSERT INTO "Teacher" VALUES (5, 'ee');
+INSERT INTO "Teacher" VALUES (1, '6161');
+INSERT INTO "Teacher" VALUES (2, '6262');
+INSERT INTO "Teacher" VALUES (3, '6363');
+INSERT INTO "Teacher" VALUES (4, '6464');
+INSERT INTO "Teacher" VALUES (5, '6565');
 
 -- ----------------------------
 -- Table structure for SC
