@@ -132,6 +132,44 @@ public class DbAnswer{
                             .append("REFERENCES \"").append(foreignKeys.getString("PKTABLE_NAME")).append("\" ")
                             .append("(\"").append(foreignKeys.getString("PKCOLUMN_NAME")).append("\")")
                     ;
+
+                    // handle delete rule
+                    tableStructure.append(" ON DELETE ");
+                    switch (foreignKeys.getShort("DELETE_RULE")) {
+                        case 0:
+                            tableStructure.append("CASCADE");
+                            break;
+                        case 1:
+                            tableStructure.append("RESTRICT");
+                            break;
+                        case 2:
+                            tableStructure.append("SET NULL");
+                            break;
+                        case 3:
+                            tableStructure.append("NO ACTION");
+                            break;
+                        case 4:
+                            tableStructure.append("SET DEFAULT");
+                    }
+
+                    // handle update rule
+                    tableStructure.append(" ON UPDATE ");
+                    switch (foreignKeys.getShort("UPDATE_RULE")) {
+                        case 0:
+                            tableStructure.append("CASCADE");
+                            break;
+                        case 1:
+                            tableStructure.append("RESTRICT");
+                            break;
+                        case 2:
+                            tableStructure.append("SET NULL");
+                            break;
+                        case 3:
+                            tableStructure.append("NO ACTION");
+                            break;
+                        case 4:
+                            tableStructure.append("SET DEFAULT");
+                    }
                 }
 
                 tableStructure.append("\n);\n");

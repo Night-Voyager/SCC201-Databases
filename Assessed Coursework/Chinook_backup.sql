@@ -6,7 +6,7 @@
  BJTU ID	: 18722007
 
  Source File: Chinook.db
- Date: 17/06/2021 10:34:32
+ Date: 17/06/2021 06:15:51
 */
 
 PRAGMA foreign_keys = false;
@@ -20,7 +20,7 @@ CREATE TABLE "Album" (
   "Title" NVARCHAR(160) NOT NULL,
   "ArtistId" INTEGER NOT NULL,
   PRIMARY KEY ("AlbumId"),
-  FOREIGN KEY ("ArtistId") REFERENCES "Artist" ("ArtistId")
+  FOREIGN KEY ("ArtistId") REFERENCES "Artist" ("ArtistId") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- ----------------------------
@@ -682,7 +682,7 @@ CREATE TABLE "Customer" (
   "Email" NVARCHAR(60) NOT NULL,
   "SupportRepId" INTEGER,
   PRIMARY KEY ("CustomerId"),
-  FOREIGN KEY ("SupportRepId") REFERENCES "Employee" ("EmployeeId")
+  FOREIGN KEY ("SupportRepId") REFERENCES "Employee" ("EmployeeId") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- ----------------------------
@@ -769,7 +769,7 @@ CREATE TABLE "Employee" (
   "Fax" NVARCHAR(24),
   "Email" NVARCHAR(60),
   PRIMARY KEY ("EmployeeId"),
-  FOREIGN KEY ("ReportsTo") REFERENCES "Employee" ("EmployeeId")
+  FOREIGN KEY ("ReportsTo") REFERENCES "Employee" ("EmployeeId") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- ----------------------------
@@ -838,7 +838,7 @@ CREATE TABLE "Invoice" (
   "BillingPostalCode" NVARCHAR(10),
   "Total" NUMERIC(10,2) NOT NULL,
   PRIMARY KEY ("InvoiceId"),
-  FOREIGN KEY ("CustomerId") REFERENCES "Customer" ("CustomerId")
+  FOREIGN KEY ("CustomerId") REFERENCES "Customer" ("CustomerId") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- ----------------------------
@@ -1268,8 +1268,8 @@ CREATE TABLE "InvoiceLine" (
   "UnitPrice" NUMERIC(10,2) NOT NULL,
   "Quantity" INTEGER NOT NULL,
   PRIMARY KEY ("InvoiceLineId"),
-  FOREIGN KEY ("TrackId") REFERENCES "Track" ("TrackId"),
-  FOREIGN KEY ("InvoiceId") REFERENCES "Invoice" ("InvoiceId")
+  FOREIGN KEY ("TrackId") REFERENCES "Track" ("TrackId") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY ("InvoiceId") REFERENCES "Invoice" ("InvoiceId") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- ----------------------------
@@ -3575,8 +3575,8 @@ CREATE TABLE "PlaylistTrack" (
   "PlaylistId" INTEGER NOT NULL,
   "TrackId" INTEGER NOT NULL,
   PRIMARY KEY ("PlaylistId", "TrackId"),
-  FOREIGN KEY ("TrackId") REFERENCES "Track" ("TrackId"),
-  FOREIGN KEY ("PlaylistId") REFERENCES "Playlist" ("PlaylistId")
+  FOREIGN KEY ("TrackId") REFERENCES "Track" ("TrackId") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY ("PlaylistId") REFERENCES "Playlist" ("PlaylistId") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- ----------------------------
@@ -12313,9 +12313,9 @@ CREATE TABLE "Track" (
   "Bytes" INTEGER,
   "UnitPrice" NUMERIC(10,2) NOT NULL,
   PRIMARY KEY ("TrackId"),
-  FOREIGN KEY ("MediaTypeId") REFERENCES "MediaType" ("MediaTypeId"),
-  FOREIGN KEY ("GenreId") REFERENCES "Genre" ("GenreId"),
-  FOREIGN KEY ("AlbumId") REFERENCES "Album" ("AlbumId")
+  FOREIGN KEY ("MediaTypeId") REFERENCES "MediaType" ("MediaTypeId") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY ("GenreId") REFERENCES "Genre" ("GenreId") ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY ("AlbumId") REFERENCES "Album" ("AlbumId") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- ----------------------------
