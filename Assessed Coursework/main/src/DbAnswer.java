@@ -219,6 +219,75 @@ public class DbAnswer{
             }
 
             /*
+             Read indexes structures of the database and generate SQL statements
+             */
+            // tables.first(); throws java.sql.SQLException: ResultSet is TYPE_FORWARD_ONLY
+            tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
+            while (tables.next()) {
+                String tableName = tables.getString("TABLE_NAME");
+                ResultSet indexInfo = metaData.getIndexInfo(null, null, tableName, false, true);
+
+                /*
+                 Generate statements only when indexes exist
+                 */
+                StringBuffer indexesStructure = new StringBuffer(
+                        "\n" +
+                        "-- ----------------------------\n" +
+                        "-- Indexes structure for table " + tableName + "\n" +
+                        "-- ----------------------------\n"
+                );
+
+                String preIndexName = "";
+                while (indexInfo.next()) {
+                    String indexName = indexInfo.getString("INDEX_NAME");
+
+                    // ignore invisible indexes
+                    if (indexName.contains("sqlite_autoindex")) continue;
+
+                    if (preIndexName.equals("")) {
+                        indexesStructure.append("CREATE ");
+
+                        if (!indexInfo.getBoolean("NON_UNIQUE"))
+                            indexesStructure.append("UNIQUE ");
+
+                        indexesStructure
+                                .append("INDEX \"").append(indexInfo.getString("INDEX_NAME")).append("\"\n")
+                                .append("ON \"").append(tableName).append("\" (\n")
+                                .append("  \"").append(indexInfo.getString("COLUMN_NAME")).append("\"");
+                    }
+                    else if (indexName.equals(preIndexName)) {
+                        indexesStructure.append(",\n  \"").append(indexInfo.getString("COLUMN_NAME")).append("\"");
+                    }
+                    else {
+                        indexesStructure.append("\n);\nCREATE ");
+
+                        if (!indexInfo.getBoolean("NON_UNIQUE"))
+                            indexesStructure.append("UNIQUE ");
+
+                        indexesStructure
+                                .append("INDEX \"").append(indexInfo.getString("INDEX_NAME")).append("\"\n")
+                                .append("ON \"").append(tableName).append("\" (\n")
+                                .append("  \"").append(indexInfo.getString("COLUMN_NAME")).append("\"");
+                    }
+
+                    if (indexInfo.getString("ASC_OR_DESC") != null)
+                        indexesStructure.append(indexInfo.getString("ASC_OR_DESC").equals("A")? " ASC" : " DESC");
+
+                    preIndexName = indexName;
+                }
+                indexesStructure.append("\n);\n");
+
+                /*
+                 Print generated statements of indexes structures on the console, write them in the backup file, and execute them
+                 */
+                if (indexesStructure.charAt(indexesStructure.length()-2) != '-') {
+                    System.out.print(indexesStructure);
+                    file.write(indexesStructure.toString().getBytes());
+                    targetDbCon.createStatement().executeUpdate(indexesStructure.toString());
+                }
+            }
+
+            /*
              Recover foreign key constraints
              */
             foreignKeyConstraints = new StringBuffer("\nPRAGMA foreign_keys = true;\n");

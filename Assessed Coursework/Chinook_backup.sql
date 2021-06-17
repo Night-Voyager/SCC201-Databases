@@ -6,7 +6,7 @@
  BJTU ID	: 18722007
 
  Source File: Chinook.db
- Date: 16/06/2021 11:15:19
+ Date: 17/06/2021 09:29:29
 */
 
 PRAGMA foreign_keys = false;
@@ -15824,5 +15824,134 @@ INSERT INTO "Track" VALUES (3500, 'String Quartet No. 12 in C Minor, D. 703 "Qua
 INSERT INTO "Track" VALUES (3501, 'L''orfeo, Act 3, Sinfonia (Orchestra)', 345, 2, 24, 'Claudio Monteverdi', 66639, 1189062, 0.99);
 INSERT INTO "Track" VALUES (3502, 'Quintet for Horn, Violin, 2 Violas, and Cello in E Flat Major, K. 407/386c: III. Allegro', 346, 2, 24, 'Wolfgang Amadeus Mozart', 221331, 3665114, 0.99);
 INSERT INTO "Track" VALUES (3503, 'Koyaanisqatsi', 347, 2, 10, 'Philip Glass', 206005, 3305164, 0.99);
+
+-- ----------------------------
+-- Indexes structure for table Album
+-- ----------------------------
+CREATE INDEX "IFK_AlbumArtistId"
+ON "Album" (
+  "ArtistId"
+);
+CREATE UNIQUE INDEX "IPK_Album"
+ON "Album" (
+  "AlbumId"
+);
+
+-- ----------------------------
+-- Indexes structure for table Artist
+-- ----------------------------
+CREATE UNIQUE INDEX "IPK_Artist"
+ON "Artist" (
+  "ArtistId"
+);
+
+-- ----------------------------
+-- Indexes structure for table Customer
+-- ----------------------------
+CREATE INDEX "IFK_CustomerSupportRepId"
+ON "Customer" (
+  "SupportRepId"
+);
+CREATE UNIQUE INDEX "IPK_Customer"
+ON "Customer" (
+  "CustomerId"
+);
+
+-- ----------------------------
+-- Indexes structure for table Employee
+-- ----------------------------
+CREATE INDEX "IFK_EmployeeReportsTo"
+ON "Employee" (
+  "ReportsTo"
+);
+CREATE UNIQUE INDEX "IPK_Employee"
+ON "Employee" (
+  "EmployeeId"
+);
+
+-- ----------------------------
+-- Indexes structure for table Genre
+-- ----------------------------
+CREATE UNIQUE INDEX "IPK_Genre"
+ON "Genre" (
+  "GenreId"
+);
+
+-- ----------------------------
+-- Indexes structure for table Invoice
+-- ----------------------------
+CREATE INDEX "IFK_InvoiceCustomerId"
+ON "Invoice" (
+  "CustomerId"
+);
+CREATE UNIQUE INDEX "IPK_Invoice"
+ON "Invoice" (
+  "InvoiceId"
+);
+
+-- ----------------------------
+-- Indexes structure for table InvoiceLine
+-- ----------------------------
+CREATE INDEX "IFK_InvoiceLineTrackId"
+ON "InvoiceLine" (
+  "TrackId"
+);
+CREATE INDEX "IFK_InvoiceLineInvoiceId"
+ON "InvoiceLine" (
+  "InvoiceId"
+);
+CREATE UNIQUE INDEX "IPK_InvoiceLine"
+ON "InvoiceLine" (
+  "InvoiceLineId"
+);
+
+-- ----------------------------
+-- Indexes structure for table MediaType
+-- ----------------------------
+CREATE UNIQUE INDEX "IPK_MediaType"
+ON "MediaType" (
+  "MediaTypeId"
+);
+
+-- ----------------------------
+-- Indexes structure for table Playlist
+-- ----------------------------
+CREATE UNIQUE INDEX "IPK_Playlist"
+ON "Playlist" (
+  "PlaylistId"
+);
+
+-- ----------------------------
+-- Indexes structure for table PlaylistTrack
+-- ----------------------------
+CREATE INDEX "IFK_PlaylistTrackTrackId"
+ON "PlaylistTrack" (
+  "TrackId"
+);
+CREATE UNIQUE INDEX "IPK_PlaylistTrack"
+ON "PlaylistTrack" (
+  "PlaylistId",
+  "TrackId"
+);
+
+-- ----------------------------
+-- Indexes structure for table Track
+-- ----------------------------
+CREATE INDEX "IFK_TrackMediaTypeId"
+ON "Track" (
+  "MediaTypeId"
+);
+CREATE INDEX "IFK_TrackGenreId"
+ON "Track" (
+  "GenreId"
+);
+CREATE INDEX "IFK_TrackAlbumId"
+ON "Track" (
+  "AlbumId"
+);
+CREATE UNIQUE INDEX "IPK_Track"
+ON "Track" (
+  "TrackId"
+);
 
 PRAGMA foreign_keys = true;
