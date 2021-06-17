@@ -6,7 +6,7 @@
  BJTU ID	: 18722007
 
  Source File: cars.db
- Date: 17/06/2021 08:07:49
+ Date: 17/06/2021 10:08:00
 */
 
 PRAGMA foreign_keys = false;
@@ -136,5 +136,21 @@ INSERT INTO "owner" VALUES (1, 'Picard', 2);
 INSERT INTO "owner" VALUES (2, 'Worf', 3);
 INSERT INTO "owner" VALUES (3, 'Troi', 4);
 INSERT INTO "owner" VALUES (4, 'Riker', 5);
+
+-- ----------------------------
+-- Indexes structure for table employees
+-- ----------------------------
+CREATE UNIQUE INDEX "emp_name"
+ON "employees" (
+  "name"
+);
+
+-- ----------------------------
+-- Indexes structure for table owner
+-- ----------------------------
+CREATE UNIQUE INDEX "owner_car"
+ON "owner" (
+  "car_id"
+);
 
 PRAGMA foreign_keys = true;

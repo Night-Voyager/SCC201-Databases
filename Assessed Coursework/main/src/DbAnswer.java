@@ -280,7 +280,7 @@ public class DbAnswer{
                 /*
                  Print generated statements of indexes structures on the console, write them in the backup file, and execute them
                  */
-                if (indexesStructure.charAt(indexesStructure.length()-2) != '-') {
+                if (indexesStructure.charAt(indexesStructure.length()-6) != '-') {  // judge whether there are indexes exist
                     System.out.print(indexesStructure);
                     file.write(indexesStructure.toString().getBytes());
                     targetDbCon.createStatement().executeUpdate(indexesStructure.toString());
