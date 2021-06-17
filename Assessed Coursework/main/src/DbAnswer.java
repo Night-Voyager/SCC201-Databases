@@ -104,7 +104,11 @@ public class DbAnswer{
                     String dataTypeName = columns.getString("TYPE_NAME");
                     dataTypeNameArrayList.add(dataTypeName);
 
-                    tableStructure.append("\n  \"").append(columnName).append("\" ").append(dataTypeName).append(",");
+                    tableStructure
+                            .append("\n  \"").append(columnName).append("\" ")
+                            .append(dataTypeName)
+                            .append(columns.getString("IS_NULLABLE").startsWith("N")? " NOT NULL" : "")  // add "NOT NULL" statement if necessary
+                            .append(",");
                 }
 
                 /*
