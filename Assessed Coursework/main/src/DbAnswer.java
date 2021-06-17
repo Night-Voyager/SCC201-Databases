@@ -119,7 +119,10 @@ public class DbAnswer{
                 while (primaryKey.next()) {
                     tableStructure.append("\"").append(primaryKey.getString("COLUMN_NAME")).append("\", ");
                 }
-                tableStructure.delete(tableStructure.length()-2, tableStructure.length()).append(")");
+                if (tableStructure.substring(tableStructure.length()-13).equals("PRIMARY KEY ("))  // handle tables without primary key
+                    tableStructure.delete(tableStructure.length()-17, tableStructure.length());
+                else
+                    tableStructure.delete(tableStructure.length()-2, tableStructure.length()).append(")");
 
                 /*
                  Get foreign keys for each table and generate statement
