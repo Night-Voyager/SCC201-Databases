@@ -12,15 +12,11 @@ public class DbBasic {
 
 	/**
 	 * Name of database driver
-	 *
-	 * @see Class#forName( )
 	 */
 	private static final String JDBC_DRIVER		= "org.sqlite.JDBC";
 
 	/**
 	 * URI prefix for database location
-	 *
-	 * @see DriverManager#getConnection( )
 	 */
 	private static final String DATABASE_LOCATION	= "jdbc:sqlite:";
 
@@ -36,7 +32,7 @@ public class DbBasic {
 	 *
 	 * @see #DbBasic(String)
 	 */
-	public    String	dbName	= null;
+	public    String	dbName;
 
 	/**
 	 * Outputs a stacktrace for debugging and exits
@@ -89,7 +85,7 @@ public class DbBasic {
 	private void open( ) {
 		File dbf = new File( dbName );
 
-		if ( dbf.exists( ) == false ) {
+		if (!dbf.exists()) {
 			System.out.println(
 				 "SQLite database file ["
 				+ dbName
@@ -131,7 +127,7 @@ public class DbBasic {
 		}
 		catch ( Exception e ) {
 			notify( "Db.close", e );
-		};
+		}
 	}
 
 	/**
@@ -145,12 +141,6 @@ public class DbBasic {
 	 */
 	public DbBasic(String _dbName ) {
 		dbName = _dbName;
-
-		if ( debug )
-			System.out.println(
-				  "Db.constructor ["
-				+ dbName
-				+ "]");
 
 		open( );
 	}
